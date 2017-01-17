@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Demo AddTabs</title>
+   
+    <link href="bootstrap.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="jquery.min.js" ></script>
+       <script type="text/javascript" src="bootstrap.min.js" ></script>
+
+   
+</head>
+<body>
+<div class="page-header"><h1>bootstrap动态添加标签页</h1></div>
+<div class="col-xs-12"><div class="col-xs-3">
+<ul class="nav nav-list">
+					<li class="active">
+						<a class="btn btn-block btn-success" href="#" rel="indexx" h="indexx">
+							<i class="menu-icon fa fa-tachometer"></i>
+							<span class="menu-text">第一个标签页 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+
+					<li class="">
+						<a href="#" class="btn btn-block btn-success">
+							<i class="menu-icon fa fa-desktop"></i>
+							<span class="menu-text">
+								第二个标签页
+							</span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+</li>
+
+<li class="active">
+						<a class="btn btn-block btn-success" href="#" rel="index" h="indexx">
+							<i class="menu-icon fa fa-tachometer"></i>
+							<span class="menu-text">第3个标签页 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+
+
+</ul>									
+</div><div class="col-xs-9">
+      
+														<ul id="myTab" class="nav nav-tabs">
+	<li class="active"><a href="#indexx" rel="indexx" data-toggle="tab">
+		首页<button type='button' class='close'  aria-label='Close' ><span aria-hidden='true' style='color:red'>×</span></button></a></li>
+	
+</ul>
+													
+												
+
+											
+														<div id="myTabContent" class="tab-content">
+	<div class="tab-pane fade in active" id="indexx">
+		asdasdsad        
+                
+                
+                
+                </div>
+	
+</div>
+												
+											
+</div>										
+</div>
+<script>
+    var activeTab = "tab1"; //当前的tab页。默认为第一个tab页。
+    var previousTab;  //上一个打开的tab页。默认为空。
+
+    $(document).ready(function () {
+        $("a").click(function () {
+            addTab($(this));
+        });
+
+        $("#myTab button.close").click(function (e) {
+            $("#" + $(this).parent().attr("rel")).remove(); //隐藏tab正文信息，调用remove方法就是删除了
+            $(this).parent().parent().remove(); //隐藏tab头，调用remove方法就是删除了
+
+            if (activeTab == $(this).parent().attr('href').substring(1)) { //判断当前tab页是否是带关闭按钮的tab页，如果是，则显示上次打开的tab页
+                $('#myTab a[href="#' + previousTab + '"]').tab('show'); //显示tab页
+            }
+            return false; //一定要return false，阻止事件往上冒泡
+        });
+
+    });
+
+    function addTab(link) {
+        // If tab already exist in the list, return
+        if ($("#" + $(link).attr("rel")).length != 0)
+            return;
+
+        // hide other tabs
+        $("#myTab li").removeClass("active");
+        $("#myTabContent div").removeClass("active");
+        //$('#myTab a:last').tab('hide')
+        // add new tab and related content
+
+        $("#myTab").append("<li class=''><a  data-toggle='tab' href='#" +
+                $(link).attr("rel") + "' >" + $(link).html() +
+                "<button type='button' class='close'  aria-label='Close' ><span aria-hidden='true' style='color:red'>×</span></button></a></li>");
+
+        $("#myTabContent").append("<div class='tab-pane fade in ' id=" + $(link).attr("rel") + ">" + $(link).attr("rel") + " ");
+        $('#myTab a:last').tab('show')
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            //获取当前被显示的tab页标签的aria-controls属性值
+            activeTab = $(e.target).attr("href").substring(1);
+            //获取前一个被显示的tab页标签的aria-controls属性值
+            previousTab = $(e.relatedTarget).attr("href").substring(1);
+        });
+        $("#myTab button.close").click(function (e) {
+            $("#" + $(this).parent().attr("href").substring(1)).remove();
+            $(this).parent().parent().remove();
+            //$(this).parent().parent().css("display", "none"); //隐藏tab头，调用remove方法就是删除了
+            //$("#" + $(link).attr("rel")).css("display", "none"); //隐藏tab正文信息，调用remove方法就是删除了
+            if (activeTab == $(this).parent().attr('href').substring(1)) { //判断当前tab页是否是带关闭按钮的tab页，如果是，则显示上次打开的tab页
+                $('#myTab a[href="#' + previousTab + '"]').tab('show'); //显示tab页
+            }
+            return false; //一定要return false，阻止事件往上冒泡
+        });
+        // set the newly added tab as current
+        //$("#" + $(link).attr("rel") + "_content").show();
+    }
+</script>
+       
+</body>
+</html>
